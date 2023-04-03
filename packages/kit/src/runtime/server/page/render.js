@@ -306,7 +306,7 @@ export async function render_response({
 			`env: ${s(public_env)}`,
 			paths.assets && `assets: ${s(paths.assets)}`,
 			`base: ${base_expression}`,
-			`element: document.currentScript.parentElement`
+			`element: document.getElementById("svelte-container") ?? document.currentScript.parentElement`
 		].filter(Boolean);
 
 		if (chunks) {
