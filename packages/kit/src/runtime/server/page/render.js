@@ -277,6 +277,9 @@ export async function render_response({
 		global
 	);
 
+	// Create a unique ID for our script element
+	const scriptId = `kit_${Math.floor(Math.random() * 1000000)}`
+
 	if (page_config.ssr && page_config.csr) {
 		body += `\n\t\t\t${fetched
 			.map((item) =>
@@ -306,7 +309,7 @@ export async function render_response({
 			`env: ${s(public_env)}`,
 			paths.assets && `assets: ${s(paths.assets)}`,
 			`base: ${base_expression}`,
-			`element: document.getElementById("svelte-container") ?? document.currentScript.parentElement`
+			`element: document.getElementById("${scriptId}").parentElement`
 		].filter(Boolean);
 
 		if (chunks) {
@@ -391,7 +394,7 @@ export async function render_response({
 			`;
 		csp.add_script(init_app);
 
-		body += `\n\t\t\t<script${
+		body += `\n\t\t\t<script id="${scriptId}" ${
 			csp.script_needs_nonce ? ` nonce="${csp.nonce}"` : ''
 		}>${init_app}</script>\n\t\t`;
 	}
